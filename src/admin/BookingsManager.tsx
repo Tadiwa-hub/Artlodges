@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { CheckCircle, XCircle, MessageCircle } from 'lucide-react';
+import { CheckCircle, XCircle, MessageCircle, User, Calendar, Home } from 'lucide-react';
 import type { Booking } from '../types';
 
 const BookingsManager = () => {
@@ -34,25 +34,23 @@ const BookingsManager = () => {
     ? bookings 
     : bookings.filter(b => b.room_type === filter);
 
-  const roomTabs = ['All', 'Executive Suite', 'King Suite', 'Superior King', 'Deluxe Double', 'Standard Room', 'Art Lodges Interior'];
+  const roomTabs = ['All', 'Executive Suite', 'King Suite', 'Superior King', 'Deluxe Double', 'Standard Room'];
 
   return (
-    <div className="space-y-8">
-      <header className="flex justify-between items-center">
-        <div>
-          <h2 className="text-3xl font-serif font-bold text-primary uppercase tracking-widest">Bookings Manager</h2>
-          <p className="text-text/60 text-sm mt-1 uppercase tracking-widest font-bold">Review and manage guest requests</p>
-        </div>
+    <div className="space-y-6 md:space-y-8 pb-10">
+      <header>
+        <h2 className="text-2xl md:text-3xl font-serif font-bold text-primary uppercase tracking-widest text-center md:text-left">Bookings Manager</h2>
+        <p className="text-text/60 text-xs md:text-sm mt-1 uppercase tracking-widest font-bold text-center md:text-left">Review and manage guest requests</p>
       </header>
 
-      {/* Tabs */}
-      <div className="flex flex-wrap gap-2 border-b border-border pb-4">
+      {/* Tabs - Scrollable on mobile */}
+      <div className="flex overflow-x-auto pb-2 gap-2 scrollbar-hide md:flex-wrap md:border-b md:border-border md:pb-4">
         {roomTabs.map(tab => (
           <button
             key={tab}
             onClick={() => setFilter(tab)}
-            className={`px-4 py-2 text-[10px] uppercase tracking-widest font-bold transition-all ${
-              filter === tab ? 'bg-primary text-white' : 'bg-white text-text/60 hover:bg-surface'
+            className={`whitespace-nowrap px-4 py-2 text-[10px] uppercase tracking-widest font-bold transition-all border ${
+              filter === tab ? 'bg-primary text-white border-primary' : 'bg-white text-text/60 border-border hover:bg-surface'
             }`}
           >
             {tab}
@@ -60,7 +58,8 @@ const BookingsManager = () => {
         ))}
       </div>
 
-      <div className="bg-white border border-border shadow-sm overflow-hidden">
+      {/* Desktop Table View */}
+      <div className="hidden md:block bg-white border border-border shadow-sm overflow-hidden">
         <table className="w-full text-left">
           <thead>
             <tr className="bg-surface border-b border-border text-[10px] uppercase tracking-widest font-bold text-text/60">
@@ -127,12 +126,86 @@ const BookingsManager = () => {
             ))}
           </tbody>
         </table>
-        {filteredBookings.length === 0 && (
-          <div className="p-12 text-center text-text/40 italic text-sm">
-            No bookings found for this category.
-          </div>
-        )}
       </div>
+
+      {/* Mobile Card View */}
+      <div className="md:hidden space-y-4">
+        {filteredBookings.map(booking => (
+          <div key={booking.id} className="bg-white border border-border shadow-sm p-5 space-y-4">
+            <div className="flex justify-between items-start">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-primary/5 rounded-full flex items-center justify-center text-primary">
+                  <User size={20} />
+                </div>
+                <div>
+                  <p className="font-bold text-primary leading-none">{booking.guest_name}</p>
+                  <p className="text-xs text-text/60 mt-1">{booking.phone}</p>
+                </div>
+              </div>
+              <span className={`px-2 py-1 text-[8px] font-black uppercase tracking-widest rounded ${
+                booking.status === 'confirmed' ? 'text-green-600 bg-green-50' : 
+                booking.status === 'cancelled' ? 'text-red-600 bg-red-50' : 
+                'text-orange-600 bg-orange-50'
+              }`}>
+                {booking.status}
+              </span>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 pt-2 border-t border-dashed border-border">
+              <div className="space-y-1">
+                <div className="flex items-center gap-1 text-[8px] uppercase font-bold text-text/40">
+                  <Home size={10} /> Room Type
+                </div>
+                <p className="text-[10px] font-bold text-accent uppercase">{booking.room_type}</p>
+              </div>
+              <div className="space-y-1 text-right">
+                <div className="flex items-center justify-end gap-1 text-[8px] uppercase font-bold text-text/40">
+                  <Calendar size={10} /> Stay Dates
+                </div>
+                <p className="text-[10px] font-bold text-primary uppercase">{booking.check_in}</p>
+                <p className="text-[8px] text-text/40">to {booking.check_out}</p>
+              </div>
+            </div>
+
+            {booking.requests && (
+              <div className="p-3 bg-surface text-[10px] text-text/70 italic border-l-2 border-accent">
+                "{booking.requests}"
+              </div>
+            )}
+
+            <div className="flex gap-2 pt-2">
+              {booking.status === 'pending' && (
+                <>
+                  <button 
+                    onClick={() => updateStatus(booking.id, 'confirmed', booking)}
+                    className="flex-1 bg-green-600 text-white py-3 rounded font-bold uppercase text-[10px] tracking-widest flex items-center justify-center gap-2"
+                  >
+                    <CheckCircle size={14} /> Confirm
+                  </button>
+                  <button 
+                    onClick={() => updateStatus(booking.id, 'cancelled', booking)}
+                    className="flex-1 bg-red-50 text-red-600 border border-red-100 py-3 rounded font-bold uppercase text-[10px] tracking-widest flex items-center justify-center gap-2"
+                  >
+                    <XCircle size={14} /> Cancel
+                  </button>
+                </>
+              )}
+              <button 
+                onClick={() => window.open(`https://wa.me/${booking.phone}`, '_blank')}
+                className="flex-1 bg-blue-50 text-blue-600 border border-blue-100 py-3 rounded font-bold uppercase text-[10px] tracking-widest flex items-center justify-center gap-2"
+              >
+                <MessageCircle size={14} /> WhatsApp
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {filteredBookings.length === 0 && (
+        <div className="p-12 text-center text-text/40 italic text-sm bg-white border border-border">
+          No bookings found for this category.
+        </div>
+      )}
     </div>
   );
 };
