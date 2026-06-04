@@ -1,0 +1,27 @@
+/* Art Lodges Custom Styles */
+
+@keyframes scroll-indicator {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(200%); }
+}
+
+.animate-scroll-indicator {
+  animation: scroll-indicator 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* Custom scrollbar for a premium feel */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FDF9F7;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #8B0000;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #C9A96E;
+}

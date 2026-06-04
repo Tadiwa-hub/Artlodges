@@ -1,0 +1,7 @@
+name = "artlodges"
+pages_build_output_dir = "dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "artlodges-db"
+database_id = "e0bcfe13-37ae-43ab-9c78-8f8b71d72c72"
