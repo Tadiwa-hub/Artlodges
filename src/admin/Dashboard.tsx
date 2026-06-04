@@ -16,14 +16,10 @@ const Dashboard = () => {
         const confirmed = data.filter((b: any) => b.status === 'confirmed');
         const pending = data.filter((b: any) => b.status === 'pending');
         
-        // Mock revenue calculation based on average room price $100
-        const revenue = confirmed.length * 100; 
-
         setStats({
           totalBookings: data.length,
           confirmedBookings: confirmed.length,
-          pendingBookings: pending.length,
-          estimatedRevenue: revenue
+          pendingBookings: pending.length
         });
       });
   }, []);
@@ -32,7 +28,6 @@ const Dashboard = () => {
     { label: 'Total Requests', value: stats.totalBookings, icon: MessageSquare, color: 'text-blue-500' },
     { label: 'Confirmed', value: stats.confirmedBookings, icon: CheckCircle, color: 'text-green-500' },
     { label: 'Pending', value: stats.pendingBookings, icon: Users, color: 'text-orange-500' },
-    { label: 'Est. Revenue', value: `$${stats.estimatedRevenue}`, icon: TrendingUp, color: 'text-accent' },
   ];
 
   return (

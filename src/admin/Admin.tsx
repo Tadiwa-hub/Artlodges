@@ -56,7 +56,7 @@ const Admin = () => {
 
   return (
     <div className="min-h-screen bg-surface flex">
-      {/* Sidebar */}
+      {/* Sidebar - Desktop */}
       <aside className="w-64 bg-primary text-white hidden lg:flex flex-col h-screen sticky top-0">
         <div className="p-8 border-b border-white/10">
           <h1 className="font-serif text-xl font-bold text-accent uppercase tracking-widest">
@@ -95,8 +95,35 @@ const Admin = () => {
         </div>
       </aside>
 
+      {/* Mobile Bottom Nav */}
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-primary text-white border-t border-white/10 flex justify-around items-center z-50 py-2">
+        <Link to="/admin" className="flex flex-col items-center p-2 text-accent">
+          <LayoutDashboard size={20} />
+          <span className="text-[10px] uppercase font-bold mt-1">Home</span>
+        </Link>
+        <Link to="/admin/bookings" className="flex flex-col items-center p-2 text-accent">
+          <BookOpen size={20} />
+          <span className="text-[10px] uppercase font-bold mt-1">Bookings</span>
+        </Link>
+        <Link to="/admin/availability" className="flex flex-col items-center p-2 text-accent">
+          <CalendarIcon size={20} />
+          <span className="text-[10px] uppercase font-bold mt-1">Dates</span>
+        </Link>
+        <Link to="/admin/settings" className="flex flex-col items-center p-2 text-accent">
+          <SettingsIcon size={20} />
+          <span className="text-[10px] uppercase font-bold mt-1">Setup</span>
+        </Link>
+        <button 
+          onClick={() => setIsLoggedIn(false)}
+          className="flex flex-col items-center p-2 text-white/60"
+        >
+          <LogOut size={20} />
+          <span className="text-[10px] uppercase font-bold mt-1">Exit</span>
+        </button>
+      </nav>
+
       {/* Main Content */}
-      <main className="flex-1 min-h-screen">
+      <main className="flex-1 min-h-screen pb-20 lg:pb-0">
         <div className="p-8">
           <Routes>
             <Route path="/" element={<Dashboard />} />
