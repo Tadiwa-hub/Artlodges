@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
-import { TrendingUp, Users, CheckCircle, MessageSquare } from 'lucide-react';
+import { Users, CheckCircle, MessageSquare } from 'lucide-react';
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
     totalBookings: 0,
     confirmedBookings: 0,
-    pendingBookings: 0,
-    estimatedRevenue: 0
+    pendingBookings: 0
   });
 
   useEffect(() => {
@@ -21,7 +20,8 @@ const Dashboard = () => {
           confirmedBookings: confirmed.length,
           pendingBookings: pending.length
         });
-      });
+      })
+      .catch(err => console.error('Error fetching bookings:', err));
   }, []);
 
   const statCards = [
@@ -37,7 +37,7 @@ const Dashboard = () => {
         <p className="text-text/60 text-sm mt-1 uppercase tracking-widest font-bold">Welcome back to Art Lodges Admin</p>
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {statCards.map((stat, i) => (
           <div key={i} className="bg-white p-6 border border-border shadow-sm">
             <div className="flex justify-between items-start mb-4">
